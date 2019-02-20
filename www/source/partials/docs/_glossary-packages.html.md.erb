@@ -1,8 +1,8 @@
 # <a name="glossary-packages" id="glossary-packages" data-magellan-target="glossary-packages">Packages</a>
 
-A package refers to a binary distribution for a given piece of software built with Habitat that contains a software library or application and any configuration information for that software. It's a signed tarball with a .hart file extension created from a plan definition and built with Habitat tools that can be post-processed to a specific format, such as when creating a Docker container.
+A package refers to a binary distribution for a given piece of software built with Habitat. A package is a signed tarball with a `.hart` file extension, and is sometimes referred to as a "heart", "habitat artifact", or "hartifact". Packages are composed of both the software library or application and the configuration information for that software. They are created from a plan definition, the `plan.sh`, and are built with Habitat tools. Packages can be post-processed to a specific format, such as when creating a Docker container.
 
-Packages are identified using a four-component scheme: `origin/name/version/release`, where origin, name, version, and release are replaced with corresponding values.
+Packages are identified using a four-part scheme: `origin/name/version/release`, where origin, name, version, and release are replaced with their corresponding values.
 
 **Identifier components**
 
@@ -11,12 +11,10 @@ Packages are identified using a four-component scheme: `origin/name/version/rele
 - `Version`: The version number designation by the author(s) of the application or service. For example, "3.1.1", or "20160118".
 - `Release`: The unique Habitat id for a given version based on the timestamp pattern _YYYYMMDDhhmmss_. For example, "20160204220358" would be a package built at 22:03:58 on February 4th, 2016. Multiple releases of a given package version may exist using different dependencies and/or compiler options.
 
-
 When referring to packages from either Builder or the Studio, you can refer to them in two ways: A package identifier and a fully qualified package identifier.
 
 - A package identifier is typically specified using the two-component form `origin/name`. For example, `core/redis` or `core/openssl`.
 - A fully-qualified package identifier includes all four components in the following format: `origin/name/version/release`. For example, `core/glibc/2.22/20160310192356`.
-
 
 If the package identifier isn't fully specified (having less than four components), then the missing components are assumed to be the most recent versions for that package. For example:
 
@@ -28,6 +26,6 @@ If the package identifier isn't fully specified (having less than four component
 
 ## Package Export Formats
 
-Habitat packages (.hart) can be exported in a number of different formats depending on what you need where. This is powerful because it means that you are using the same immutable artifact Habitat package, but then exporting it into the format that you need to do a specific job. So when you are iterating locally in a Docker container, and then promote that package to an environment running Kubernetes, and then promote it to another datacenter that's running virtual machines, the package is identical in each location -- it's simply exported to the correct format for the job you are trying to do. 
+Habitat packages, `.hart` files, can be exported in a number of different formats depending on what you need where. This is powerful because it means that you are using the same immutable artifact Habitat package, but then exporting it into the format that you need to do a specific job. So when you are iterating locally in a Docker container, and then promote that package to an environment running Kubernetes, and then promote it to another datacenter that's running virtual machines, the package is identical in each location -- it's simply exported to the correct format for the job you are trying to do. 
 
 You can read more about how to export packages, and what exporters are currently available, [here](/docs/developing-packages/#pkg-exports).
