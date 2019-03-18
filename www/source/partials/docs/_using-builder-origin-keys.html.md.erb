@@ -3,25 +3,41 @@
 
 Creating an origin automatically generates an origin key pair. 
 
-Origin key cryptography is asymmetric: it has a public key that you can distribute freely, and a private key that you should keep safe.
+Origin key cryptography is asymmetric: it has a public origin key that you can distribute freely, and a private origin key that you should keep safe.
 
-Supervisors use the public origin key to verify the integrity of a downloaded Habitat before running it.
-By default, Supervisors only run packages for which they have the public origin key, and cannot run a package without the correct origin public key.
-You can provide the origin public key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat.
+Habitat Builder and Habitat Depot require access to at least the public origin key to validate packages in the origin. 
 
-## Locating your origin keys
+Habitat Supervisors use the public origin key to verify the integrity of a downloaded Habitat artifact before running it.
 
-Creating an origin automatically generates two keys, a private origin key and a public origin key. You will use the private key to sign your packages and Supervisors will use the public key to verify the integrity of your packages (`.hart` files). You can find your origin keys on the Builder site by navigating to the relevant origin and selecting the **Keys** tab.
+By default, Supervisors only run packages for which they have the public origin key, and cannot run packages without the correct origin public origin key.
+You can provide the origin public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat.
+
+## Creating origin keys
+
+Creating an origin, either on the Habitat Builder site or with the Habitat CLI, automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your packages and Supervisors will use the public origin key to verify the integrity of your packages (`.hart` files). 
+
+### Origin keys on Habitat Builder
+
+You can find your origin keys on the Builder site by navigating to the relevant origin and selecting the **Keys** tab.
 
 <img src="/images/screenshots/origin-keys.png">
 
-You'll find any private and public origin keys that you have already saved at `~/.hab/cache/keys` on your host machine and at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
+### Origin keys on your workstation or in the Habitat Studio
+
+You'll find any private and public origin keys that you have already saved at `~/.hab/cache/keys` on your host(local) machine, and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
 
 ```shell
 ls -la `~~/.hab/cache/keys`
 ````
 
-## Downloading origin keys from Builder
+#### Create an origin key pair from the command line use 
+
+You have two options for creating an origin key pair from the command line. 
+
+You can create an origin key pair while setting up your host machine, following the instructions in the `hab cli setup` interaction.
+Alternatively, you can run `hab origin key generate <ORIGIN>` from either the host machine or from within the studio.
+
+## Download origin keys from Builder
 
 To download your private or public origin key, select the download icon from the right end of the key details, under the "Actions" heading.
 
@@ -33,18 +49,12 @@ To get your keys from Builder from the command line, use the
 hab origin key import
 ```
 
-## Create an origin key pair from the command line use 
+### Upload origin keys to Builder
 
-After finishing the basic account creation steps, you need to create your origin key pair. 
+Creating an origin from your workstation or the Studio, stores the  origin keys in that environment. Habitat Builder, or Habitat Depot if that's what you're using, will not have either origin keys that corresponding to the packages in your origin.
 
-You can create an origin key pair by running `hab cli setup` from your host machine, or by running `hab origin key generate <ORIGIN>` from either the host machine or from within the studio.
+At the very least, Builder requires at the public origin key to verify the integrity of your origin packages,so you'll need to upload it. You can also upload your private origin key; however, if you do not upload at least the public origin key, Builder will reject the any upload of packages for that origin.
 
+Upload origin keys through the Builder or Depot site, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication. 
 
-## Download an existing origin key pair.
-
-
-### Upload the keys for your origin
-
-If you created a new origin and/or Builder does not have the public key corresponding to the private key used to build your package, you must upload it. You also have the ability to upload your private key; however, if you do not upload at least the public key, Builder will reject the upload of your packages for that origin.
-
-You can upload keys for the origin through the web interface for Builder, or by using the `hab origin key upload` command. You must be authenticated using the access token described earlier before you can upload keys.
+<%# TODO: Link to access token once the partials are completely integrated. %>
