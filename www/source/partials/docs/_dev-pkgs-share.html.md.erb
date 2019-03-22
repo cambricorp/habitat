@@ -41,7 +41,7 @@ Your public and private origin keys are located at `~/.hab/cache/keys` on your h
 
 ### Upload the keys for your origin
 
-If you created a new origin and/or Builder does not have the public key corresponding to the private key used to build your package, you must upload it. You also have the ability to upload your private key; however, if you do not upload at least the public key, Builder will reject the upload of your packages for that origin.
+If you created a new origin from your host machine or from the Studio, Builder will not have either of the origin keys corresponding to your package. Builder will not accept uploaded origin packages without first having the correct origin public key.
 
 You can upload keys for the origin through the web interface for Builder, or by using the `hab origin key upload` command. You must be authenticated using the access token described earlier before you can upload keys.
 
