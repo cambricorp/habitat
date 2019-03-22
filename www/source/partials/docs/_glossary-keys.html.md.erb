@@ -6,13 +6,13 @@ Habitat has strong cryptography built into both Habitat Builder and the Supervis
 
 Every package and artifact in Habitat belongs to an [origin](/docs/glossary/#glossary-packages) and is cryptographically signed with that origin's private key.
 Habitat requires the public origin key for working with origin packages, both to produce the un-compiled package and to consume the compiled Habitat artifact, or `.hart`.
-On the production side, Builder--both the service and the Depot--use the origin private key to transmit packages between your development environment to Builder. On the consumption side, the Supervisors require the origin private key to verify the compiled artifacts.
+On the production side, Builder---both the service and the Depot---use the origin private key to sign and verify packages as they move from your development environment to Builder. On the consumption side, the Supervisors require the origin private key to verify the compiled artifacts.
 
 Origin key cryptography is asymmetric: it has a public key that you can distribute freely, and a private key that you should keep safe.
 
-Habitat uses the public origin key to verify the integrity of a downloaded Habitat artifact before running it.
+Habitat uses the public origin key to verify the integrity of downloaded artifacts before running it.
 By default, Supervisors only run artifacts for which they have the public origin key, and will not run a package without it.
-You can provide a public origin key to the Supervisors by pointing them to a Builder site that has it, or by saving the key onto disk outside of Habitat.
+You can provide a public origin key to Habitat by pointing it to a Builder site that has the origin key, or by saving the origin key onto disk outside of Habitat.
 
 ## User and Service Group Keys
 

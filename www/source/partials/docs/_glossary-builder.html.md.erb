@@ -5,10 +5,8 @@ Habitat Builder consists of the Builder service and the Depot.
 
 ## Habitat Builder
 
-Users have the option to connect their GitHub repositories to Builder to enable continuous builds of their plans. 
- as either they check-in new code to GitHub, which will then initiate a new build via a Github hook, or as underlying package dependencies are updated. 
- If you've added your Habitat plan to the root of your source code repository and any of the packages your project depends on (for example, openssl, ruby, or node) has a new release, Builder will automatically rebuild your software and post the updated package to your project's `unstable` channel, where you can review and promote it according to your regular release procedure.
+Users have the option to connect their GitHub repositories to Builder to enable continuous builds of their plans. Checking in new code to GitHub initiates a new build through a Github hook. If you've added your Habitat plan to the root of your source code repository and your project depends on any of the Habitat Core Packages (for example, openssl, ruby, or node), when these packages are updated, Builder automatically rebuilds your software and post the updated package to your project's `unstable` channel, where it will wait until you review and promote it according to your regular release procedure.
 
 ## Depot
 
-The Depot is a searchable repository that stores packages for download and upload by Supervisors and Studios. 
+The Depot is a searchable repository that stores packages for use in Habitat. 
