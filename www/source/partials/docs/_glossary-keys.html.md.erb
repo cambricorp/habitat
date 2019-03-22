@@ -2,7 +2,7 @@
 
 Habitat has strong cryptography built into both Habitat Builder and the Supervisor. This means there are several different kinds of keys.
 
-## Origin key pairs
+## Origin Key Pairs
 
 Every package and artifact in Habitat belongs to an [origin](/docs/glossary/#glossary-packages) and is cryptographically signed with that origin's private key.
 Habitat requires the public origin key for working with origin packages, both to produce the un-compiled package and to consume the compiled Habitat artifact, or `.hart`.
@@ -14,7 +14,7 @@ Habitat uses the public origin key to verify the integrity of a downloaded Habit
 By default, Supervisors only run artifacts for which they have the public origin key, and will not run a package without it.
 You can provide a public origin key to the Supervisors by pointing them to a Builder or Depot site that has it, or by saving the key onto disk outside of Habitat.
 
-## User and service group keys
+## User and Service Group Keys
 
 User and service group keys are used to set up trust relationships between these two entities. Service groups can be set up to reject communication (e.g. applying new configuration via `hab config apply`) from untrusted users.
 
@@ -22,6 +22,6 @@ By default, service groups will trust *any* communication, so for a production d
 
 User and service group keys also utilize asymmetric cryptography. To apply configuration changes to service groups when running in this mode, a user uses their own private key to encrypt configuration information for a service group, using that service group's public key. The service group then uses its private key to decrypt the configuration information, and the user's public key to verify.
 
-## Ring encryption key
+## Ring Encryption Key
 
 A Supervisor ring can be optionally set up to encrypt *all* communication across the network. This requires the use of a symmetric pre-shared key. Any Supervisor joining the ring that does not present this key will be rejected.
