@@ -33,7 +33,7 @@ Once you have this token, you can set the `HAB_AUTH_TOKEN` [environment variable
 
 ### Create an origin key pair
 
-After finishing the basic account creation steps, you need to create your origin key pair. You will use the private key to sign your packages and Supervisors will use the public key to verify the integrity of your packages (`.hart` files).
+After finishing the basic account creation steps, you need to create your origin key pair. You will use the private key to sign your packages and Habitat will verify the integrity of your packages (`.hart` files) with the public key.
 
 You can create an origin key pair by running `hab cli setup` from your host machine, or by running `hab origin key generate <ORIGIN>` from either the host machine or from within the studio.
 
@@ -47,7 +47,7 @@ You can upload keys for the origin through the web interface for Builder, or by 
 
 ### Upload packages to Builder
 
-Once Builder possesses at least the public origin key, then you may upload one or more packages to that origin with the `hab pkg upload` command. Builder will check the cryptographic integrity of the package before allowing you to upload it. Uploading packages is also a privileged operation for which you must have the access token.
+Once Builder possesses at least the public origin key, then you may upload one or more packages to that origin with the `hab pkg upload` command. After Habitat validates the cryptographic integrity of the package, it is then uploaded and stored on Builder. Uploading packages is a privileged operation for which you must have the access token.
 
 ### Promote packages
 

@@ -11,7 +11,7 @@ On the production side, Builder---both the service and the Depot---use the origi
 Origin key cryptography is asymmetric: it has a public key that you can distribute freely, and a private key that you should keep safe.
 
 Habitat uses the public origin key to verify the integrity of downloaded artifacts before running it.
-By default, Supervisors only run artifacts for which they have the public origin key, and will not run a package without it.
+By default, Supervisors only run artifacts for which Habitat has the public origin key, and will not run a package without it.
 You can provide a public origin key to Habitat by pointing it to a Builder site that has the origin key, or by saving the origin key onto disk outside of Habitat.
 
 ## User and Service Group Keys

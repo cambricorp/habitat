@@ -14,13 +14,28 @@ Because the private key is used to sign your package, it should not be shared fr
 
 The Habitat Studio is a self-contained and minimal environment, which means that you'll need to share your private origin keys with Studio to sign packages. You can do this in three ways:
 
-1. Set `HAB_ORIGIN` to the name of the origin you intend to use before entering the Studio like `export HAB_ORIGIN=originname`.
-1. Set `HAB_ORIGIN_KEYS` to one or more key names, separated by commas like `export HAB_ORIGIN_KEYS=originname-internal,originname-test,originname`.
-1. Use the `-k` flag (short for “keys”) which accepts one or more key names separated by commas with `hab studio -k originname-internal,originname-test enter`.
+1. Set `HAB_ORIGIN` to the name of the origin you intend to use before entering the Studio:
+  
+  ```bash
+  export HAB_ORIGIN=originname
+  ```
+  
+  This approach overrides the `HAB_ORIGIN` environment variable and imports your public and private origin keys into the Studio environment. It also overrides any `pkg_origin` values in the packages that you build. This is useful because you can use it to build your own package, as well as to build your own versions of other packages, for example, `originname/node` or `originname/glibc`.
 
-The first way overrides the `HAB_ORIGIN` environment variable to import public and private keys into the Studio environment and override any `pkg_origin` values in the packages that you build. This is useful if you want to not only build your package, but also you can use this to build your own versions of other packages, such as `originname/node` or `originname/glibc`.
+1. Set `HAB_ORIGIN_KEYS` to the names of your origin. If you're using more than one origin, separated them with commas:
+  
+  ```bash
+  export HAB_ORIGIN_KEYS=originname-internal,originname-test,originname
+  ```
 
-The second and third way import multiple private origin keys that must match the origin names for the plans you intend to build.
+  The imports the private origin keys, which must exactly match the origin names for the plans you intend to build.
+
+1. Use the `-k` flag (short for “keys”) which accepts one or more key names separated by commas with 
+
+  ```bash
+  hab studio -k originname-internal,originname-test enter
+  ````
+  The imports the private origin keys, which must exactly match the origin names for the plans you intend to build.
 
 After you create or receive your private origin key, you can start up the Studio and build your package.
 
