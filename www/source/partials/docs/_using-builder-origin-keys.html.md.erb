@@ -3,14 +3,14 @@
 
 Creating an origin automatically generates an origin key pair. 
 
-Origin key cryptography is asymmetric: it has a public origin key that you can distribute freely, and a private origin key that you should keep safe.
+Origin key cryptography is asymmetric: it has a public origin key that you can distribute freely, and a private origin key that you should distribute only to members of the origin.
 
 Habitat Builder and Habitat Depot require access to at least the public origin key to validate packages in the origin. 
 
-Habitat Supervisors use the public origin key to verify the integrity of a downloaded Habitat artifact before running it.
+Habitat uses the public origin key to verify the integrity of a downloaded Habitat artifact before running it.
 
 By default, Supervisors only run packages for which they have the public origin key, and cannot run packages without the correct origin public origin key.
-You can provide the origin public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat.
+You can provide the public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat in a location that Habitat knows to look for it, such as `~/.hab/cache/keys` on Linux systems.
 
 ## Creating origin keys
 
@@ -28,7 +28,7 @@ You'll find any private and public origin keys that you have already saved at `~
 
 ```shell
 ls -la `~~/.hab/cache/keys`
-````
+```
 
 #### Create an origin key pair from the command line use 
 
