@@ -14,7 +14,24 @@ You can provide the public origin key to the Supervisors by pointing them to a d
 
 ## Creating origin keys
 
-Creating an origin, either on the Habitat Builder site or with the Habitat CLI, automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your packages and Supervisors will use the public origin key to verify the integrity of your packages (`.hart` files). 
+Creating an origin, either on the Habitat Builder site automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your Habitat artifacts and Supervisors will use the public origin key to verify the integrity of these `.hart` files.
+
+To create origin keys from the command line, use:
+
+```bash
+hab origin key generate <ORIGIN>
+```
+
+Your keys will be stored in `~/.hab/cache/keys` on Linux sytems. 
+
+```bash
+ls ~/.hab/cache/keys
+
+test-origin-20190416223046.pub
+test-origin-20190416223046.sig.key
+```
+
+In this case, the origin is named "test-origin". The string of numbers, "20190416223046" show the date and time the key was created, in this case, 2019-04-16-22-30-46. The public key has the file extension `.pub` and the private key has `.sig.key`, which stands for "signing key", another name for the private key.
 
 ### Origin keys on Habitat Builder
 
@@ -27,7 +44,7 @@ You can find your origin keys on the Builder site by navigating to the relevant 
 You'll find any private and public origin keys that you have already saved at `~/.hab/cache/keys` on your host(local) machine, and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
 
 ```shell
-ls -la `~~/.hab/cache/keys`
+ls -la `~/.hab/cache/keys`
 ```
 
 #### Create an origin key pair from the command line use 
@@ -43,18 +60,31 @@ To download your private or public origin key, select the download icon from the
 
 <img src="/images/screenshots/origin-keys-download.png">
 
-To get your keys from Builder from the command line, use the
+To get your keys from Builder from the command line, use the command
 
 ```shell
-hab origin key import
+hab origin key download <ORIGIN>
 ```
 
 ### Upload origin keys to Builder
 
-Creating an origin from your workstation or the Studio, stores the  origin keys in that environment. Habitat Builder, or Habitat Depot if that's what you're using, will not have either origin keys that corresponding to the packages in your origin.
+When you create Habitat origin keys on your workstation or in the Studio with `hab origin key generate <ORIGIN>`, your origin key pairs are stored in that environment. Habitat Builder will not have access to origin keys stored on your workstation or in the Studio, which means that you will need to upload keys to Builder either to upload or download your Habitat origins.
 
-At the very least, Builder requires at the public origin key to verify the integrity of your origin packages,so you'll need to upload it. You can also upload your private origin key; however, if you do not upload at least the public origin key, Builder will reject the any upload of packages for that origin.
+At the very least, Builder requires at the public origin key to verify the integrity of your origins, so you'll need to upload it. Builder requires the public origin key to upload artifacts for that origin. You can also upload your private origin key.
 
-Upload origin keys through the Builder or Depot site, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication. 
+Upload origin keys through the Builder, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication.
+
+```bash
+hab origin key upload --auth <AUTH_TOKEN>  --secfile <PATH_TO_PRIVATE_KEY> --secret --pubfile <PATH_TO_PUBLIC_KEY>
+```
+<!-- ^THIS COMMAND IS WRONG, BUT I DON'T KNOW WHAT'S RIGHT -->
+
+Use `hab origin key import` to read the key from a standard input stream:
+
+```bash
+hab origin key import <enter or paste key>
+hab origin key import <PATH_TO_KEY>
+curl <URL_THAT_RETURNS_KEY> | hab origin key import
+```
 
 <%# TODO: Link to access token once the partials are completely integrated. %>

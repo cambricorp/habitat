@@ -4,17 +4,25 @@ Habitat has strong cryptography built into both Habitat Builder and the Supervis
 
 ## Origin Key Pairs
 
-Every package and artifact in Habitat belongs to an [origin](/docs/glossary/#glossary-packages) and is cryptographically signed with that origin's private key.
-Habitat requires both the public and the private key for producing and consuming with origin packages.
+Every package and artifact in Habitat belongs to an [origin](/docs/glossary/#glossary-artifacts) and is cryptographically signed with that origin's private key.
+Habitat requires both the public and the private key for producing and consuming origin packages.
 On the production side, Builder---both the service and the Depot---use the origin private key to sign and verify packages as they move from your development environment to Builder. On the consumption side, the Supervisors require the public key to verify the compiled artifacts.
 
 Origin key cryptography is asymmetric: it has a public key that you can distribute freely, and a private key that you should keep safe.
 
-Habitat uses the public origin key to verify the integrity of downloaded artifacts before running them.
-Habitat will only run artifacts for which it has the public origin key, and will not run them without it.
+Habitat uses the public origin key to verify the integrity of downloaded artifacts before installing them.
+Habitat will only install artifacts for which it has the public origin key, and will not install them without it.
 You can provide a public origin key to Habitat by pointing it to a Builder site that has the origin key, or by saving the origin key onto disk outside of Habitat.
 Use `hab origin key upload` to upload origin keys to Builder.
-Use `hab origin key import` to download your origin keys from Builder to your environment.
+Use `hab origin key download` to download your origin keys from Builder to your environment.
+Use `hab origin key import` to read the key from a standard input stream:
+
+```bash
+hab origin key import <enter or paste key>
+hab origin key import <PATH_TO_KEY>
+curl <URL_THAT_RETURNS_KEY> | hab origin key import
+```
+
 See the [hab origin key](docs/habitat-cli/#hab-origin-key) command documentation for more information about working with origin keys from the command line.
 
 ## User and Service Group Keys
