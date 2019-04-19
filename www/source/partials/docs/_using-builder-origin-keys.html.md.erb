@@ -1,4 +1,4 @@
-## <a name="origin-keys" id="origin keys" data-magellan-target="origin-keys">Origin Keys</a>
+## <a name="origin-keys" id="origin keys" data-magellan-target="origin-keys">Using Origin Keys</a>
 
 ## About origin keys
 
@@ -13,9 +13,34 @@ Habitat uses the public origin key to verify the integrity of a downloaded Habit
 By default, Supervisors only run packages for which they have the public origin key, and cannot run packages without the correct origin public origin key.
 You can provide the public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat in a location that Habitat knows to look for it, such as `~/.hab/cache/keys` on Linux systems.
 
+### Origin keys on Habitat Builder
+
+You can find your origin keys on the Builder site by navigating to the relevant origin and selecting the **Keys** tab.
+
+<img src="/images/screenshots/origin-keys.png">
+
+### Origin keys on your workstation
+
+You'll find your saved private and public origin keys at `~/.hab/cache/keys` on your host(local) machine and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
+
+```shell
+ls -la `~/.hab/cache/keys`
+```
+
+From within Habitat Studio, run:
+
+```shell
+ls -la `~/hab/cache/keys`
+```
+
 ## Creating origin keys
 
 Creating an origin, either on the Habitat Builder site automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your Habitat artifacts and Supervisors will use the public origin key to verify the integrity of these `.hart` files.
+
+You can create origin keys from your host machine or from the Habitat Studio. 
+
+You can create an origin key pair during your initial Habitat installation by following the instructions in the `hab cli setup` interaction.
+If you've already installed Habitat, you can create keys for additional origins by running `hab origin key generate <ORIGIN>`, where <ORIGIN> is the name for your new Habitat origin,  from either the host machine or from within the studio.
 
 To create origin keys from the command line, use:
 
@@ -33,27 +58,6 @@ test-origin-20190416223046.sig.key
 ```
 
 In this case, the origin is named "test-origin". The string of numbers, "20190416223046" show the date and time the key was created, in this case, 2019-04-16-22-30-46. The public key has the file extension `.pub` and the private key has `.sig.key`, which stands for "signing key", another name for the private key.
-
-### Origin keys on Habitat Builder
-
-You can find your origin keys on the Builder site by navigating to the relevant origin and selecting the **Keys** tab.
-
-<img src="/images/screenshots/origin-keys.png">
-
-### Origin keys on your workstation or in the Habitat Studio
-
-You'll find any private and public origin keys that you have already saved at `~/.hab/cache/keys` on your host(local) machine, and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
-
-```shell
-ls -la `~/.hab/cache/keys`
-```
-
-#### Create an origin key pair from the command line use 
-
-You have two options for creating an origin key pair from the command line. 
-
-You can create an origin key pair while setting up your host machine, following the instructions in the `hab cli setup` interaction.
-Alternatively, you can run `hab origin key generate <ORIGIN>` from either the host machine or from within the studio.
 
 ## Download origin keys from Builder
 
