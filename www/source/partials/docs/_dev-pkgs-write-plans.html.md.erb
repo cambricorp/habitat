@@ -102,7 +102,7 @@ The following sections describe each of these steps in more detail.
 #### Create your package identifier
 The origin is a place for you to set default privacy rules, store your packages, and collaborate with teammates. For example, the "core" origin is where the core maintainers of Habitat share packages that are foundational to building other packages. If you would like to browse them, they are located in the [core-plans repo](https://github.com/habitat-sh/core-plans), and on [Habitat Builder's Core Origin](https://bldr.habitat.sh/#/pkgs/core).
 
-Creating packages for a specific origin requires that you have access to the that origin's private key. The private origin key will be used to sign the package when it is built by the hab-plan-build command. Origin keys are kept in `$HOME/.hab/cache/keys` on the host machine and `/hab/cache/keys` while in the studio. For more information on origin keys, see [Keys](/docs/glossary/#glossary-keys).
+Creating packages for a specific origin requires that you have access to the that origin's private key. The private origin key will be used to sign the package when it is built by the hab-plan-build command. Origin keys are kept in `$HOME/.hab/cache/keys` on the host machine and `/hab/cache/keys` while in the studio. For more information on origin keys, see [Keys](/docs/glossary/#glossary-origin-keys).
 
 The next important part of your package identifier is the name of the package. Standard naming convention is to base the name of the package off of the name of the source or project you download and install into the package.
 
