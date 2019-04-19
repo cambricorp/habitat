@@ -13,13 +13,13 @@ Habitat uses the public origin key to verify the integrity of a downloaded Habit
 By default, Supervisors only run packages for which they have the public origin key, and cannot run packages without the correct origin public origin key.
 You can provide the public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat in a location that Habitat knows to look for it, such as `~/.hab/cache/keys` on Linux systems.
 
-### Origin keys on Habitat Builder
+## Finding origin keys on Builder
 
 You can find your origin keys on the Builder site by navigating to the relevant origin and selecting the **Keys** tab.
 
 <img src="/images/screenshots/origin-keys.png">
 
-### Origin keys on your workstation
+## Finding origin keys locally
 
 You'll find your saved private and public origin keys at `~/.hab/cache/keys` on your host(local) machine and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
 
@@ -33,7 +33,7 @@ From within Habitat Studio, run:
 ls -la `~/hab/cache/keys`
 ```
 
-## Creating origin keys
+### Creating origin keys
 
 Creating an origin, either on the Habitat Builder site automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your Habitat artifacts and Supervisors will use the public origin key to verify the integrity of these `.hart` files.
 
@@ -59,7 +59,7 @@ test-origin-20190416223046.sig.key
 
 In this case, the origin is named "test-origin". The string of numbers, "20190416223046" show the date and time the key was created, in this case, 2019-04-16-22-30-46. The public key has the file extension `.pub` and the private key has `.sig.key`, which stands for "signing key", another name for the private key.
 
-## Download origin keys from Builder
+### Download origin keys from Builder
 
 To download your private or public origin key, select the download icon from the right end of the key details, under the "Actions" heading.
 
