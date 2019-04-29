@@ -10,7 +10,34 @@ At the bottom of the profile page, select **Generate Token**.
 
 <img src="/images/screenshots/generate-token.png">
 
-Copy your token, and then set it in the CLI by running:
+Copy your token from this page.
+
+### Windows
+
+Save your Habitat authorization token as an environmental variable in Windows using the graphical user interface. In your Windows help bar, enter `environment` and select `Edit the system environment variables`from the list of suggestions.
+
+This opens the `System Properties` window on the `Advanced` tab. Select the `Environment Variables` button.
+
+<img src='/images/screenshots/environment_variable.png'>
+
+In the next window, select the `New` button in the top part. This opens a dialog box that lets you set individual user variables.
+
+<img src='/images/screenshots/environment_variable_new.png'>
+
+Create a permanant environment varaible by entering `HAB_AUTH_TOKEN` as the variable name and then pasting the authorization token that you copied after you generated a new token on your Habitat profile page. After you select the `OK`, you will see the new token in the user variables field.
+
+<img src='/images/screenshots/environment_variable_new_var.png'>
+
+To test that your new token works correctly, open the Command Prompt---which you can find by entering command in the Windows search box---and entering `echo %HAB_AUTH_TOKEN%`. You should see the value that you pasted into the environment variable.
+
+<img src='/images/screenshots/environment_variable_set.png'>
+
+<img src='/images/screenshots/environment_variable_echo.png'>
+
+
+### MacOS
+
+To set the HAB_AUTH_TOKEN in the CLI by running:
 
 ```bash
 export HAB_AUTH_TOKEN=<token>

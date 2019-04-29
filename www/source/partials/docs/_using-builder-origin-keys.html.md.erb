@@ -24,13 +24,21 @@ You can find your origin keys on the Builder site by navigating to the relevant 
 You'll find your saved private and public origin keys at `~/.hab/cache/keys` on your host(local) machine and  at `/hab/cache/keys` inside the studio environment. To see your existing origin keys, from your host command line, run:
 
 ```shell
-ls -la `~/.hab/cache/keys`
+ls -la ~/.hab/cache/keys
+```
+
+```powershell
+Get-ChildItem C:\hab\cache\keys
 ```
 
 From within Habitat Studio, run:
 
 ```shell
-ls -la `~/hab/cache/keys`
+ls -la ~/hab/cache/keys
+```
+
+```powershell
+Get-ChildItem C:\hab\cache\keys
 ```
 
 ### Creating origin keys
