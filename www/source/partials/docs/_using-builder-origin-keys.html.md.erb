@@ -65,7 +65,7 @@ test-origin-20190416223046.pub
 test-origin-20190416223046.sig.key
 ```
 
-In this case, the origin is named "test-origin". The string of numbers, "20190416223046" show the date and time the key was created, in this case, 2019-04-16-22-30-46. The public key has the file extension `.pub` and the private key has `.sig.key`, which stands for "signing key", another name for the private key.
+In this case, the origin is named "test-origin". The string of numbers, "20190416223046" show the date and time the key was created, in this case, 2019-04-16 22:30:46. The public key has the file extension `.pub` and the private key has `.sig.key`, since the private key is used for cryptographically signing Habitat artifacts.
 
 ### Download origin keys from Builder
 
@@ -73,7 +73,7 @@ To download your private or public origin key, select the download icon from the
 
 <img src="/images/screenshots/origin-key-download.png">
 
-To get your keys from Builder from the command line, use the command
+To get your public origin key from Builder from the command line, use the command
 
 ```shell
 hab origin key download <ORIGIN>
@@ -85,7 +85,7 @@ When you create Habitat origin keys on your workstation or in the Studio with `h
 
 At the very least, Builder requires at the public origin key to verify the integrity of your origins, so you'll need to upload it. Builder requires the public origin key to upload artifacts for that origin. You can also upload your private origin key.
 
-Upload origin keys through the Builder, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication.
+Upload origin keys through the Builder web interface, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication.
 
 #### Upload command
 
@@ -108,14 +108,14 @@ Use `hab origin key import` to read the key from a standard input stream:
 
 ```bash
 hab origin key import <enter or paste key>
-hab origin key import <PATH_TO_KEY>
+hab origin key import < <PATH_TO_KEY>
 curl <URL_THAT_RETURNS_KEY> | hab origin key import
 ```
 
 In some Linux-based system, such as MacOS, you may encounter an upload failure.
 To remediate this failure:
 
- * Check that your `HAB_AUTH_KEY` is properly set and initialized
+ * Check that your `HAB_AUTH_TOKEN` is properly set and initialized
  * Add your `SSL_CERT_FILE` to the environmental variables in your interactive shell configuration file, such as your `.bashrc`.
 
 ```bash

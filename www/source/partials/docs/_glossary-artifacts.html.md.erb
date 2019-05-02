@@ -1,19 +1,19 @@
 # <a name="glossary-artifacts" id="glossary-artifacts" data-magellan-target="glossary-artifacts">Packages</a>
 
-A package refers to a binary distribution for a given piece of software built with Habitat. A Habitat artifact is a signed tarball with a `.hart` file extension, and is sometimes referred to as a "heart", or "hartifact". Habitat artifacts are composed of a software library or application, the configuration information for that software, and lifecycle hooks. They are created from a the plan file, a `plan.sh` on Linux systems or a `plan.ps1` on Windows systems, and are built with Habitat tools. Habitat artifacts can be exported to a specific format, such as when creating a Docker container.
+A Habitat artifact refers to a binary distribution for a given package built with Habitat. A Habitat artifact is a signed tarball with a `.hart` file extension. Habitat artifacts are composed of a software library or application, the configuration information for that software, and lifecycle hooks. They are created from a the plan file, a `plan.sh` on Linux systems or a `plan.ps1` on Windows systems, and are built with Habitat tools. Habitat artifacts can be exported to a specific format, such as when creating a Docker container.
 
-Habitat artifacts are identified using a four-part scheme: `origin/name/version/release`, where origin, name, version, and release are replaced with their corresponding values.
+Habitat artifacts are identified using a four-part fully-qualified package identifier(FQPI) that takes the for: `origin/name/version/release`, where origin, name, version, and release are replaced with their corresponding values.
 
-**Identifier components**
+**Package Identifier components**
 
-- `Origin`: A name that defines a set of related Habitat artifacts. For example, "sample", "core", or "mycompany".
+- `Origin`: A name that defines a set of related Habitat packages and the artifacts they generate. For example, "sample", "core", or "mycompany".
 - `Name`: The name of the application or service. For example, "postgres".
 - `Version`: The version number designation by the author(s) of the application or service. For example, "3.1.1", or "20160118".
 - `Release`: The unique Habitat id for a given version based on the timestamp pattern _YYYYMMDDhhmmss_. For example, "20160204220358" would be a Habitat artifact built at 22:03:58 on February 4th, 2016. Multiple releases of a given Habitat artifact version may exist using different dependencies and/or compiler options.
 
 When referring to Habitat artifacts from either Builder or the Studio, you can refer to them in two ways:
 
-- With a Habitat artifact identifier 
+- With a Habitat package identifier 
 - With a fully-qualified Habitat artifact identifier
 
 Habitat artifact identifier
@@ -26,7 +26,7 @@ If the Habitat artifact identifier isn't fully specified (having less than four 
 
 - `core/glibc` assumes that version and release values are for the latest version of chef/glibc.
 
-- `core/glibc/2.22` assumes that the version of chef/glibc is 2.22 and that the release is for the latest version of chef/glibc/2.22.
+- `core/glibc/2.22` assumes that the version of chef/glibc is 2.22 and that the release is for the most recent value of chef/glibc/2.22.
 
 - `core/glibc/2.22/20160310192356` only refers to the specific Habitat artifact 20160310192356.
 
