@@ -162,12 +162,12 @@ sidebar_links:
       link: "/docs/glossary/#glossary-artifacts"
     - title: Builder
       link: "/docs/glossary/#glossary-builder"
-    - title: Keys
-      link: "/docs/glossary/#glossary-origin-keys"
-    - title: Launcher
-      link: "/docs/glossary/#glossary-launcher"
     - title: Hab
       link: "/docs/glossary/#glossary-hab"
+    - title: Keys
+      link: "/docs/glossary/#glossary-keys"
+    - title: Launcher
+      link: "/docs/glossary/#glossary-launcher"
     - title: Plans
       link: "/docs/glossary/#glossary-plan"
     - title: Scaffolding

@@ -10,8 +10,8 @@ Habitat Builder and Habitat Depot require access to at least the public origin k
 
 Habitat uses the public origin key to verify the integrity of a downloaded Habitat artifact before running it.
 
-By default, Supervisors only install packages for which they have the public origin key.
-You can provide the public origin key to the Supervisors by pointing them to a depot that containing it, or by putting the key on disk outside of Habitat in a location that Habitat knows to look for it, such as `~/.hab/cache/keys` on Linux systems.
+By default, Habitat only installs packages for which ir has the public origin key.
+You can provide the public origin key to Habitat by pointing it to a depot that containing it, or by putting the public origin key on disk outside of Habitat in a location that Habitat knows to look for it, such as `~/.hab/cache/keys` on Linux systems or `C:\hab\cache\keys` on Windows systems.
 
 ## Finding origin keys on Builder
 
@@ -112,7 +112,7 @@ hab origin key import < <PATH_TO_KEY>
 curl <URL_THAT_RETURNS_KEY> | hab origin key import
 ```
 
-In some MacOS you may encounter an upload failure.
+On a MacOS, you may encounter an upload failure.
 To remediate this failure:
 
  * Check that your `HAB_AUTH_TOKEN` is properly set and initialized
