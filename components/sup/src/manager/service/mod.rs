@@ -32,9 +32,9 @@ use crate::{census::{CensusGroup,
             error::{Error,
                     Result,
                     SupError},
-            manager::{action::ShutdownSpec,
-                      FsCfg,
+            manager::{FsCfg,
                       GatewayState,
+                      ShutdownConfig,
                       Sys},
             sup_futures};
 use futures::{future,
@@ -365,7 +365,7 @@ impl Service {
     /// Return a future that will shut down a service, performing any
     /// necessary cleanup, and run its post-stop hook, if any.
     pub fn stop(&mut self,
-                shutdown_spec: ShutdownSpec)
+                shutdown_config: ShutdownConfig)
                 -> impl Future<Item = (), Error = SupError> {
         self.stop_health_checks();
 
@@ -375,7 +375,7 @@ impl Service {
         let f = self.supervisor
                     .lock()
                     .expect("Couldn't lock supervisor")
-                    .stop(shutdown_spec)
+                    .stop(shutdown_config)
                     .and_then(move |_| {
                         gs.write()
                           .expect("GatewayState lock is poisoned")
