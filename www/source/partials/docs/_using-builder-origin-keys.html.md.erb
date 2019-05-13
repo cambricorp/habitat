@@ -83,7 +83,7 @@ hab origin key download <ORIGIN>
 
 When you create Habitat origin keys on your workstation or in the Studio with `hab origin key generate <ORIGIN>`, your origin key pairs are stored in that environment. Habitat Builder cannot access origin keys stored on your workstation or in the Studio, which means that you need to upload keys to Builder either to upload or download your Habitat origins.
 
-At the very least, Builder requires at the public origin key to verify the integrity of your origins, so you'll need to upload it. Builder requires the public origin key to upload artifacts for that origin. You can also upload your private origin key.
+At the very least, Builder requires the public origin key to verify the integrity of artifacts associated with the origin, so you'll need to upload it. Builder requires the public origin key to upload artifacts for that origin. You can also upload your private origin key to enable Builder to build new artifacts from packages whose plans are linked within the origin.
 
 Upload origin keys through the Builder web interface, or by using the `hab origin key upload` command. Uploading origin keys uses the Habitat access token for authentication.
 
