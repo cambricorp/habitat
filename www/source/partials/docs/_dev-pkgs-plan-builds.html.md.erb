@@ -98,7 +98,7 @@ A non-interactive build is one in which Habitat creates a Studio for you, builds
 
     > Similar to the `hab studio enter` command above, the type of studio where the build runs is determined by your host platform and `hab pkg build` takes the same `-w` and `-D` flags to adjust the studio environment if desired.
 
-3. The resulting package is inside a directory called `results`, along with any build logs and a build report (`last_build.env`) that includes machine-parsable metadata about the build.
+1. The resulting package is inside a directory called `results`, along with any build logs and a build report (`last_build.env`) that includes machine-parsable metadata about the build.
 
 By default, the Studio is reset to a clean state after the package is built; however, *if you are using the Linux version of `hab`*, you can reuse a previous Studio when building your package by specifying the `-R` option when calling the `hab pkg build` subcommand.
 
