@@ -33,7 +33,7 @@ It has the name of the software, the version, where to download it, a checksum t
 
 When you have finished creating your plan and call `build` in Habitat studio, the following occurs:
 
-1.  The build script ensures that the private origin key is available to sign the package.
+1.  The build script ensures that the private origin key is available to sign the artifact.
 2.  If specified in `pkg_source`, a compressed file containing the source code is downloaded.
 3.  The checksum of that file, specified in `pkg_shasum`, is validated.
 4.  The source is extracted into a temporary cache.
