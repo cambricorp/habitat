@@ -5,8 +5,8 @@ Habitat has strong cryptography built into Habitat Builder, the Supervisor, and 
 ## Origin Key Pairs
 
 Every Habitat artifact belongs to an [origin](/docs/glossary/#glossary-artifacts) and is cryptographically signed with that origin's private key.
-Habitat requires both the public and the private key for producing and consuming artifacts.
-On the production side, Builder---both the service and the Depot---use the origin private key to sign and verify packages as they move from your development environment to Builder. On the consumption side, the Supervisors require the public key to verify the compiled artifacts.
+Habitat requires the private key for producing artifacts and the public key and consuming them.
+On the production side, Builder---both the service and the Depot---use the origin private key to sign and verify packages as they move from your development environment to Builder. On the consumption side, Habitat requires the public key to verify the compiled artifacts during installation.
 
 Origin key cryptography is asymmetric: it has a public key that you can distribute freely, and a private key that you should keep safe.
 
@@ -35,4 +35,4 @@ User and service group keys also utilize asymmetric cryptography. To apply confi
 
 ## Ring Encryption Key
 
-A Supervisor ring can be optionally set up to encrypt *all* communication across the network. This requires the use of a symmetric, pre-shared key.
+A Supervisor network can be optionally set up to encrypt *all* supervisor-to-supervisor communication. This requires the use of a symmetric, pre-shared key.

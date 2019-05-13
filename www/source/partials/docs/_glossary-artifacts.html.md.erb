@@ -22,7 +22,7 @@ Habitat package identifier
 Fully-qualified Habitat artifact identifier
 :includes all four components in the following format: `origin/name/version/release`. For example, `core/glibc/2.22/20160310192356`.
 
-If the Habitat artifact identifier isn't fully specified (having less than four components), then the missing components are assumed to be the most recent versions for that Habitat artifact. For example:
+If the Habitat artifact identifier isn't fully specified (having fewer than four components), then the missing components are assumed to be the most recent versions. For example:
 
 - `core/glibc` assumes that version and release values are for the latest version of chef/glibc.
 
@@ -32,6 +32,6 @@ If the Habitat artifact identifier isn't fully specified (having less than four 
 
 ## Habitat Artifact Export Formats
 
-Habitat `.hart` files can be exported in a number of different formats depending on what you need where. This is powerful because you can use the same immutable Habitat artifact by exporting it into a format that you need for a specific job. For example, when you can use one format for iterating locally in a Docker container, another to promote that Habitat artifact to an environment running Kubernetes, and a third to promote it to a datacenter that's running virtual machines, but the Habitat artifact is identical in each location -- it's simply exported to the correct format for the job you are trying to do. 
+Habitat `.hart` files can be exported in a number of different formats depending on what you need where. This is powerful because you can use the same immutable Habitat artifact by exporting it into a format that you need for a specific job. For example, when you can use one format for iterating locally in a Docker container, another to promote that Habitat artifact to an environment running Kubernetes, and a third to promote it to a datacenter that's running virtual machines, but the Habitat artifact is identical in each location---it's simply exported to the correct format for the job you are trying to do. 
 
 You can read more about how to export Habitat artifacts, and what exporters are currently available, [here](/docs/developing-packages/#pkg-exports).
