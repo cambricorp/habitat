@@ -43,7 +43,7 @@ Get-ChildItem C:\hab\cache\keys
 
 ### Creating origin keys
 
-Creating an origin key pair on on the Habitat Builder site automatically generates two keys, a private origin key and a public origin key. You will use the private origin key to sign your Habitat artifacts and Supervisors will use the public origin key to verify the integrity of these `.hart` files.
+Creating an origin key pair on on the Habitat Builder site automatically generates two keys, a private origin key and a public origin key. Habitat will use the private origin key to sign your Habitat artifacts when they are created and the public origin key to verify the integrity of artifacts for the origin when they are installed.
 
 You can also create origin keys from your host machine or from the Habitat Studio. 
 
