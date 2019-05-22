@@ -17,5 +17,5 @@ pub fn start(ui: &mut UI, bldr_url: &str, token: &str, origin: &str) -> Result<(
               .map_err(Error::APIClient)?;
 
     ui.status(Status::Deleted, format!("origin {}.", origin))
-      .map_err(Into::into)
+      .map_err(Error::from)
 }
