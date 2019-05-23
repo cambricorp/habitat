@@ -1104,21 +1104,35 @@ impl Client {
     /// * Remote depot unavailable
     pub fn search_package(&self,
                           search_term: &str,
+                          limit: usize,
                           token: Option<&str>)
-                          -> Result<(Vec<PackageIdent>, bool)> {
-        let mut res = self.maybe_add_authz(self.0.get(&package_search(search_term)), token)
-                          .send()?;
-        match res.status {
-            StatusCode::Ok | StatusCode::PartialContent => {
-                let mut encoded = String::new();
-                res.read_to_string(&mut encoded)
-                   .map_err(Error::BadResponseBody)?;
-                let package_results: PackageResults<PackageIdent> = serde_json::from_str(&encoded)?;
-                let packages: Vec<PackageIdent> = package_results.data;
-                Ok((packages, res.status == StatusCode::PartialContent))
-            }
-            _ => Err(err_from_response(res)),
+                          -> Result<(Vec<PackageIdent>, isize)> {
+        let mut packages = Vec::new();
+        let mut total = 0;
+        let mut status_code = StatusCode::PartialContent;
+        while packages.len() < limit && status_code == StatusCode::PartialContent {
+            let req = self.0
+                          .get_with_custom_url(&package_search(search_term), |url| {
+                              url.set_query(Some(&format!("range={:?}&distinct=true",
+                                                          packages.len())));
+                          });
+            let mut res = self.maybe_add_authz(req, token).send()?;
+            match res.status {
+                StatusCode::Ok | StatusCode::PartialContent => {
+                    let mut encoded = String::new();
+                    res.read_to_string(&mut encoded)
+                       .map_err(Error::BadResponseBody)?;
+                    let package_results: PackageResults<PackageIdent> =
+                        serde_json::from_str(&encoded)?;
+                    packages.extend(package_results.data);
+                    total = package_results.total_count;
+                    status_code = res.status;
+                }
+                _ => return Err(err_from_response(res)),
+            };
         }
+        packages.truncate(limit);
+        Ok((packages, total))
     }
 
     fn maybe_add_authz<'a>(&'a self,
