@@ -65,5 +65,5 @@ add_lints_to_clippy_args -D "${denied_lints[@]}"
 set -u
 
 echo "--- Running clippy!"
-echo "Clippy rules: cargo clippy --all-targets --tests -- ${clippy_args[*]}"
+echo "Clippy rules: cargo +$toolchain clippy --all-targets --tests -- ${clippy_args[*]}"
 cargo +"$toolchain" clippy --all-targets --tests -- "${clippy_args[@]}"
