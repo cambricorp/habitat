@@ -1,6 +1,6 @@
 use crate::manager::{self,
-                     service::{HealthCheck,
-                               HealthCheckHook}};
+                     service::{HealthCheckHook,
+                               HealthCheckResult}};
 use actix;
 use actix_web::{http::{self,
                        StatusCode},
