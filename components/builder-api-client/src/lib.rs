@@ -1097,6 +1097,50 @@ impl Client {
         }
     }
 
+    fn seach_package_with_range(&self,
+                                search_term: &str,
+                                token: Option<&str>,
+                                range: usize)
+                                -> Result<(PackageResults<PackageIdent>, bool)> {
+        let req = self.0
+                      .get_with_custom_url(&package_search(search_term), |url| {
+                          url.set_query(Some(&format!("range={:?}&distinct=true", range)));
+                      });
+        let mut res = self.maybe_add_authz(req, token).send()?;
+        let mut encoded = String::new();
+        res.read_to_string(&mut encoded)
+           .map_err(Error::BadResponseBody)?;
+        let package_results = serde_json::from_str(&encoded)?;
+        match res.status {
+            StatusCode::Ok => Ok((package_results, false)),
+            StatusCode::PartialContent => Ok((package_results, true)),
+            _ => Err(err_from_response(res)),
+        }
+    }
+
+    fn search_package_impl(&self,
+                           search_term: &str,
+                           limit: usize,
+                           token: Option<&str>,
+                           search_with_range: impl Fn(&Client,
+                              &str,
+                              Option<&str>,
+                              usize)
+                              -> Result<(PackageResults<PackageIdent>, bool)>)
+                           -> Result<(Vec<PackageIdent>, usize)> {
+        let mut packages = Vec::new();
+        loop {
+            let (mut package_results, more_to_come) =
+                search_with_range(self, search_term, token, packages.len())?;
+            packages.append(&mut package_results.data);
+
+            if packages.len() >= limit || !more_to_come {
+                packages.truncate(limit);
+                return Ok((packages, package_results.total_count as usize));
+            }
+        }
+    }
+
     /// Returns a vector of PackageIdent structs
     ///
     /// # Failures
@@ -1106,33 +1150,8 @@ impl Client {
                           search_term: &str,
                           limit: usize,
                           token: Option<&str>)
-                          -> Result<(Vec<PackageIdent>, isize)> {
-        let mut packages = Vec::new();
-        let mut total = 0;
-        let mut status_code = StatusCode::PartialContent;
-        while packages.len() < limit && status_code == StatusCode::PartialContent {
-            let req = self.0
-                          .get_with_custom_url(&package_search(search_term), |url| {
-                              url.set_query(Some(&format!("range={:?}&distinct=true",
-                                                          packages.len())));
-                          });
-            let mut res = self.maybe_add_authz(req, token).send()?;
-            match res.status {
-                StatusCode::Ok | StatusCode::PartialContent => {
-                    let mut encoded = String::new();
-                    res.read_to_string(&mut encoded)
-                       .map_err(Error::BadResponseBody)?;
-                    let package_results: PackageResults<PackageIdent> =
-                        serde_json::from_str(&encoded)?;
-                    packages.extend(package_results.data);
-                    total = package_results.total_count;
-                    status_code = res.status;
-                }
-                _ => return Err(err_from_response(res)),
-            };
-        }
-        packages.truncate(limit);
-        Ok((packages, total))
+                          -> Result<(Vec<PackageIdent>, usize)> {
+        self.search_package_impl(search_term, limit, token, Self::seach_package_with_range)
     }
 
     fn maybe_add_authz<'a>(&'a self,
@@ -1330,5 +1349,98 @@ mod tests {
         assert_eq!(pre.id, post.id);
         assert_eq!(pre.origin_id, post.origin_id);
         assert_eq!(pre.owner_id, post.owner_id);
+    }
+
+    fn get_test_ident(name: &str) -> PackageIdent {
+        PackageIdent { origin:  String::from("test"),
+                       name:    String::from(name),
+                       version: None,
+                       release: None, }
+    }
+
+    fn seach_generator<'a>(
+        data: &'a [&str],
+        step: usize)
+        -> impl Fn(&Client, &str, Option<&str>, usize) -> Result<(PackageResults<PackageIdent>, bool)>
+               + 'a {
+        move |_client, search_term, _token, range| {
+            let filtered = data.iter()
+                               .filter(|d| d.contains(search_term))
+                               .collect::<Vec<_>>();
+
+            if filtered.is_empty() {
+                return Ok((PackageResults { range_start: 0,
+                                            range_end:   0,
+                                            total_count: 0,
+                                            data:        vec![], },
+                           false));
+            }
+
+            let total = filtered.len();
+            let last = total - 1;
+            let (start, end) = if range >= last {
+                (last, last)
+            } else {
+                (range, (range + step).min(last))
+            };
+            let filtered_range = filtered[start..=end].iter()
+                                                      .map(|s| get_test_ident(**s))
+                                                      .collect::<Vec<_>>();
+            let result = PackageResults { range_start: start as isize,
+                                          range_end:   end as isize,
+                                          total_count: total as isize,
+                                          data:        filtered_range, };
+            Ok((result, end < last))
+        }
+    }
+
+    #[test]
+    fn package_search() {
+        let client = Client::new("http://test.com", "", "", None).expect("valid client");
+
+        let sample_data = vec!["one_a", "one_b", "one_c", "one_d", "one_e", "two_a", "two_b",
+                               "two_c", "two_d", "two_e"];
+
+        let searcher = seach_generator(sample_data.as_slice(), 2);
+        let r = client.search_package_impl("one", 10, None, searcher)
+                      .expect("valid search");
+        assert_eq!(r.0.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                   vec!["one_a", "one_b", "one_c", "one_d", "one_e"]);
+        assert_eq!(r.1, 5);
+
+        let searcher = seach_generator(sample_data.as_slice(), 2);
+        let r = client.search_package_impl("_", 3, None, searcher)
+                      .expect("valid search");
+        assert_eq!(r.0.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                   vec!["one_a", "one_b", "one_c"]);
+        assert_eq!(r.1, 10);
+
+        let searcher = seach_generator(sample_data.as_slice(), 10);
+        let r = client.search_package_impl("a", 2, None, searcher)
+                      .expect("valid search");
+        assert_eq!(r.0.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                   vec!["one_a", "two_a"]);
+        assert_eq!(r.1, 2);
+
+        let searcher = seach_generator(sample_data.as_slice(), 10);
+        let r = client.search_package_impl("does_not_exist", 100, None, searcher)
+                      .expect("valid search");
+        assert_eq!(r.0.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                   Vec::<String>::new());
+        assert_eq!(r.1, 0);
+    }
+
+    #[ignore]
+    #[test]
+    fn package_search_large() {
+        let client = Client::new("http://test.com", "", "", None).expect("valid client");
+
+        let count = 100_000;
+        let sample_data = std::iter::repeat("test").take(count).collect::<Vec<_>>();
+
+        let searcher = seach_generator(sample_data.as_slice(), 50);
+        let r = client.search_package_impl("test", count, None, searcher)
+                      .expect("valid search");
+        assert_eq!(r.1, count);
     }
 }
