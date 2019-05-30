@@ -13,10 +13,10 @@ use std::{fmt,
 
 lazy_static::lazy_static! {
     static ref SG_FROM_STR_RE: Regex =
-        Regex::new(r"\A((?P<application_environment>[^#@]+)#)?(?P<service>[^#@]+)\.(?P<group>[^#@.]+)(@(?P<organization>[^#@.]+))?\z").unwrap();
+        Regex::new(r"\A(([^#@]+)#)?([^#@]+)\.([^#@.]+)(@([^#@.]+))?\z").unwrap();
 
     static ref AE_FROM_STR_RE: Regex =
-        Regex::new(r"\A(?P<application>[^#.@]+)\.(?P<environment>[^#.@]+)\z").unwrap();
+        Regex::new(r"\A([^#.@]+)\.([^#.@]+)\z").unwrap();
 }
 
 /// Determines how the presence of bound service groups affects the
@@ -151,7 +151,7 @@ impl ServiceGroup {
               S2: AsRef<str>
     {
         if group.as_ref().contains('.') {
-            return Err(Error::InvalidGroupName(group.as_ref().to_string()));
+            return Err(Error::DotInGroupName(group.as_ref().to_string()));
         }
         let formatted = Self::format(app_env, service, group, organization);
         Self::validate(&formatted)?;
@@ -183,10 +183,10 @@ impl ServiceGroup {
     pub fn validate(value: &str) -> Result<()> {
         let caps = SG_FROM_STR_RE.captures(value)
                                  .ok_or_else(|| Error::InvalidServiceGroup(value.to_string()))?;
-        if caps.name("service").is_none() {
+        if caps.get(3).is_none() {
             return Err(Error::InvalidServiceGroup(value.to_string()));
         }
-        if caps.name("group").is_none() {
+        if caps.get(4).is_none() {
             return Err(Error::InvalidServiceGroup(value.to_string()));
         }
         Ok(())
@@ -195,7 +195,7 @@ impl ServiceGroup {
     pub fn application_environment(&self) -> Option<ApplicationEnvironment> {
         SG_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("application_environment")
+                      .get(2)
                       .and_then(|v| {
                           Some(
                     ApplicationEnvironment::from_str(v.as_str())
@@ -207,7 +207,7 @@ impl ServiceGroup {
     pub fn service(&self) -> &str {
         SG_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("service")
+                      .get(3)
                       .unwrap()
                       .as_str()
     }
@@ -215,7 +215,7 @@ impl ServiceGroup {
     pub fn group(&self) -> &str {
         SG_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("group")
+                      .get(4)
                       .unwrap()
                       .as_str()
     }
@@ -223,7 +223,7 @@ impl ServiceGroup {
     pub fn org(&self) -> Option<&str> {
         SG_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("organization")
+                      .get(6)
                       .and_then(|v| Some(v.as_str()))
     }
 
@@ -264,19 +264,19 @@ impl FromStr for ServiceGroup {
             Some(c) => c,
             None => return Err(Error::InvalidServiceGroup(value.to_string())),
         };
-        let service = match caps.name("service") {
+        let service = match caps.get(3) {
             Some(s) => s.as_str(),
             None => return Err(Error::InvalidServiceGroup(value.to_string())),
         };
-        let group = match caps.name("group") {
+        let group = match caps.get(4) {
             Some(g) => g.as_str(),
             None => return Err(Error::InvalidServiceGroup(value.to_string())),
         };
-        let app_env = match caps.name("application_environment") {
+        let app_env = match caps.get(2) {
             Some(a) => Some(ApplicationEnvironment::from_str(a.as_str())?),
             None => None,
         };
-        let org = match caps.name("organization") {
+        let org = match caps.get(6) {
             Some(o) => Some(o.as_str()),
             None => None,
         };
@@ -311,10 +311,10 @@ impl ApplicationEnvironment {
         let caps =
             AE_FROM_STR_RE.captures(value)
                           .ok_or_else(|| Error::InvalidApplicationEnvironment(value.to_string()))?;
-        if caps.name("application").is_none() {
+        if caps.get(1).is_none() {
             return Err(Error::InvalidApplicationEnvironment(value.to_string()));
         }
-        if caps.name("environment").is_none() {
+        if caps.get(2).is_none() {
             return Err(Error::InvalidApplicationEnvironment(value.to_string()));
         }
         Ok(())
@@ -323,7 +323,7 @@ impl ApplicationEnvironment {
     pub fn application(&self) -> &str {
         AE_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("application")
+                      .get(1)
                       .unwrap()
                       .as_str()
     }
@@ -331,7 +331,7 @@ impl ApplicationEnvironment {
     pub fn environment(&self) -> &str {
         AE_FROM_STR_RE.captures(&self.0)
                       .unwrap()
-                      .name("environment")
+                      .get(2)
                       .unwrap()
                       .as_str()
     }
@@ -363,11 +363,11 @@ impl FromStr for ApplicationEnvironment {
             Some(c) => c,
             None => return Err(Error::InvalidApplicationEnvironment(value.to_string())),
         };
-        let app = match caps.name("application") {
+        let app = match caps.get(1) {
             Some(s) => s.as_str(),
             None => return Err(Error::InvalidApplicationEnvironment(value.to_string())),
         };
-        let env = match caps.name("environment") {
+        let env = match caps.get(2) {
             Some(g) => g.as_str(),
             None => return Err(Error::InvalidApplicationEnvironment(value.to_string())),
         };
@@ -543,7 +543,7 @@ mod test {
         match ServiceGroup::new(None, service, group, None) {
             Err(e) => {
                 match e {
-                    Error::InvalidGroupName(val) => assert_eq!(group, val),
+                    Error::DotInGroupName(val) => assert_eq!(group, val),
                     wrong => panic!("Unexpected error returned: {:?}", wrong),
                 }
             }
